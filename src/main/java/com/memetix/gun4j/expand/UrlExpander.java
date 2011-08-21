@@ -31,7 +31,7 @@ import org.json.simple.JSONObject;
  * @author Jonathan Griggs <jonathan.griggs @ gmail.com>
  * @date Aug 18, 2011
  */
-public class UrlExpandService extends GunshortenAPI {
+public class UrlExpander extends GunshortenAPI {
     public static final String SERVICE_URL = BASE_SERVICE_URL + "/expand?";
     private static final String PARAM_NAME = "shortUrl";
     

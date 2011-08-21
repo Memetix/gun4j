@@ -36,12 +36,12 @@ import static org.junit.Assert.*;
  * @author Jonathan Griggs <jonathan.griggs @ gmail.com>
  * @date Aug 18, 2011
  */
-public class UrlExpandServiceTest {
+public class UrlExpanderTest {
     
     @Rule
     public ExpectedException exception = ExpectedException.none();
     
-    public UrlExpandServiceTest() {
+    public UrlExpanderTest() {
     }
 
     @BeforeClass
@@ -66,7 +66,7 @@ public class UrlExpandServiceTest {
     @Test
     public void testGetServiceUrl() {
         String expResult = System.getProperty("gunshorten.api.url")!=null ? System.getProperty("gunshorten.api.url") + "/expand?" : "http://gunshorten.cloudfoundry.com/api/expand?";
-        String result = UrlExpandService.SERVICE_URL;
+        String result = UrlExpander.SERVICE_URL;
         assertEquals(expResult, result);
     }
     
@@ -74,7 +74,7 @@ public class UrlExpandServiceTest {
     @Test
     public void testExpandUrl() throws Exception {
         String shortUrl = "http://t.co/UdEWcNm";
-        String result = UrlExpandService.expand(shortUrl);
+        String result = UrlExpander.expand(shortUrl);
         String expResult = "http://twitcaps.com/search?q=dust+storm";
         assertNotNull(result);
         assertEquals(expResult, result);
@@ -83,7 +83,7 @@ public class UrlExpandServiceTest {
     @Test
     public void testExpandUnshortUrl() throws Exception {
         String shortUrl = "http://twitcaps.com/search?q=dust+storm";
-        String result = UrlExpandService.expand(shortUrl);
+        String result = UrlExpander.expand(shortUrl);
         String expResult = "http://twitcaps.com/search?q=dust+storm";
         assertNotNull(result);
         assertEquals(expResult, result);
@@ -99,7 +99,7 @@ public class UrlExpandServiceTest {
         shortUrls.add(shortUrl1);
         shortUrls.add(shortUrl2);
         
-        Map<String,String> results = UrlExpandService.expand(shortUrls);
+        Map<String,String> results = UrlExpander.expand(shortUrls);
         String expResult1 = "http://twitcaps.com/search?q=dust+storm";
         String expResult2 = "http://twitcaps.com/search?q=waterpop";
         
@@ -121,7 +121,7 @@ public class UrlExpandServiceTest {
         shortUrls.add(shortUrl2);
         shortUrls.add(shortUrl3);
         
-        Map<String,String> results = UrlExpandService.expand(shortUrls);
+        Map<String,String> results = UrlExpander.expand(shortUrls);
         String expResult1 = "http://twitcaps.com/search?q=dust+storm";
         String expResult2 = "http://twitcaps.com/search?q=waterpop";
         
