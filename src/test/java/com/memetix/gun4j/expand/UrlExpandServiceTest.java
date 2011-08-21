@@ -65,17 +65,16 @@ public class UrlExpandServiceTest {
      */
     @Test
     public void testGetServiceUrl() {
-        UrlExpandService instance = new UrlExpandService();
         String expResult = System.getProperty("gunshorten.api.url")!=null ? System.getProperty("gunshorten.api.url") + "/expand?" : "http://gunshorten.cloudfoundry.com/api/expand?";
-        String result = instance.getServiceUrl();
+        String result = UrlExpandService.SERVICE_URL;
         assertEquals(expResult, result);
     }
     
+    
     @Test
     public void testExpandUrl() throws Exception {
-        UrlExpandService instance = new UrlExpandService();
         String shortUrl = "http://t.co/UdEWcNm";
-        String result = instance.expand(shortUrl);
+        String result = UrlExpandService.expand(shortUrl);
         String expResult = "http://twitcaps.com/search?q=dust+storm";
         assertNotNull(result);
         assertEquals(expResult, result);
@@ -83,9 +82,8 @@ public class UrlExpandServiceTest {
     
     @Test
     public void testExpandUnshortUrl() throws Exception {
-        UrlExpandService instance = new UrlExpandService();
         String shortUrl = "http://twitcaps.com/search?q=dust+storm";
-        String result = instance.expand(shortUrl);
+        String result = UrlExpandService.expand(shortUrl);
         String expResult = "http://twitcaps.com/search?q=dust+storm";
         assertNotNull(result);
         assertEquals(expResult, result);
@@ -93,7 +91,6 @@ public class UrlExpandServiceTest {
     
     @Test
     public void testExpandMultipleUrlsSet() throws Exception {
-        UrlExpandService instance = new UrlExpandService();
         Set<String> shortUrls = new HashSet<String>();
         
         String shortUrl1 = "http://t.co/UdEWcNm";
@@ -102,7 +99,7 @@ public class UrlExpandServiceTest {
         shortUrls.add(shortUrl1);
         shortUrls.add(shortUrl2);
         
-        Map<String,String> results = instance.expand(shortUrls);
+        Map<String,String> results = UrlExpandService.expand(shortUrls);
         String expResult1 = "http://twitcaps.com/search?q=dust+storm";
         String expResult2 = "http://twitcaps.com/search?q=waterpop";
         
@@ -114,7 +111,6 @@ public class UrlExpandServiceTest {
     
     @Test
     public void testExpandMultipleUrlsList() throws Exception {
-        UrlExpandService instance = new UrlExpandService();
         List<String> shortUrls = new ArrayList<String>();
         
         String shortUrl1 = "http://t.co/UdEWcNm";
@@ -125,7 +121,7 @@ public class UrlExpandServiceTest {
         shortUrls.add(shortUrl2);
         shortUrls.add(shortUrl3);
         
-        Map<String,String> results = instance.expand(shortUrls);
+        Map<String,String> results = UrlExpandService.expand(shortUrls);
         String expResult1 = "http://twitcaps.com/search?q=dust+storm";
         String expResult2 = "http://twitcaps.com/search?q=waterpop";
         

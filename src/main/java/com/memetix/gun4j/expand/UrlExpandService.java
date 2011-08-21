@@ -32,21 +32,17 @@ import org.json.simple.JSONObject;
  * @date Aug 18, 2011
  */
 public class UrlExpandService extends GunshortenAPI {
-    private static final String SERVICE_URL = BASE_SERVICE_URL + "/expand?";
+    public static final String SERVICE_URL = BASE_SERVICE_URL + "/expand?";
     private static final String PARAM_NAME = "shortUrl";
     
-    @Override
-    public String getServiceUrl() {
-        return SERVICE_URL;
-    }
     
-    public String expand(final String shortUrl) throws Exception {
+    public static String expand(final String shortUrl) throws Exception {
         final StringBuilder sb = new StringBuilder();
         sb.append(PARAM_NAME);
         sb.append(EQUALS);
         sb.append(shortUrl);
         
-        final Map<String,String> results = parseResponse(post(sb.toString()));
+        final Map<String,String> results = parseResponse(post(SERVICE_URL,sb.toString()));
         
         if(results.containsKey(shortUrl))
             return results.get(shortUrl);
@@ -54,7 +50,7 @@ public class UrlExpandService extends GunshortenAPI {
             return shortUrl;
     }
     
-    public Map<String,String> expand(final Set<String> shortUrls) throws Exception {
+    public static Map<String,String> expand(final Set<String> shortUrls) throws Exception {
         final StringBuilder sb = new StringBuilder();
         
         int i = 0;
@@ -68,17 +64,17 @@ public class UrlExpandService extends GunshortenAPI {
             i++;
         }
         
-        final Map<String,String> results = parseResponse(post(sb.toString()));
+        final Map<String,String> results = parseResponse(post(SERVICE_URL,sb.toString()));
         return results;
     }
     
-    public Map<String,String> expand(final List<String> shortUrls) throws Exception {
+    public static Map<String,String> expand(final List<String> shortUrls) throws Exception {
         final Set<String> urlSet = new HashSet<String>();
         urlSet.addAll(shortUrls);
         return expand(urlSet);
     }
     
-    private Map<String,String> parseResponse(final JSONObject json) {
+    private static Map<String,String> parseResponse(final JSONObject json) {
         final Map<String,String> expandedResults = new HashMap<String,String>();
         final JSONObject data = (JSONObject)json.get("data");
         final JSONArray expand = (JSONArray)data.get("expand");

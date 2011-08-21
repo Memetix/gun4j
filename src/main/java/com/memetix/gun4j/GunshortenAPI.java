@@ -43,10 +43,8 @@ public abstract class GunshortenAPI {
     protected static String AMPERSAND = "&";
     protected static String EQUALS = "=";
     
-    protected abstract String getServiceUrl();
-    
-    protected JSONObject post(String paramsString) throws Exception {
-        final URL url = new URL(getServiceUrl());
+    protected static JSONObject post(final String serviceUrl, final String paramsString) throws Exception {
+        final URL url = new URL(serviceUrl);
         final HttpURLConnection uc = (HttpURLConnection) url.openConnection();
         if(referrer!=null)
             uc.setRequestProperty("referer", referrer);
@@ -65,7 +63,7 @@ public abstract class GunshortenAPI {
             final int responseCode = uc.getResponseCode();
             final String result = inputStreamToString(uc.getInputStream());
             if(responseCode!=200) {
-                throw new Exception("Error from Chits API: " + result);
+                throw new Exception("Error from Gunshorten API: " + result);
             }
             return parseJSON(result);
         } finally { 
@@ -94,14 +92,14 @@ public abstract class GunshortenAPI {
     			}
     		}
     	} catch (Exception ex) {
-    		throw new Exception("[chits4j] Error reading response stream.", ex);
+    		throw new Exception("[gun4j] Error reading response stream.", ex);
     	}
     	
     	return outputBuilder.toString();
     }
     
-    private static JSONObject parseJSON(String jsonResponse) throws ParseException {
-        Object obj = JSONValue.parse(jsonResponse);
+    private static JSONObject parseJSON(final String jsonResponse) throws ParseException {
+        final Object obj = JSONValue.parse(jsonResponse);
         return (JSONObject)obj;
     }
 }
