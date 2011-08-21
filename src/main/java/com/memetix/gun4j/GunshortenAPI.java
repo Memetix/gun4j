@@ -39,9 +39,13 @@ public abstract class GunshortenAPI {
     protected static final String ENCODING = "UTF-8";
     private static String referrer;
     protected static final String BASE_SERVICE_URL = System.getProperty("gunshorten.api.url")!=null ? System.getProperty("gunshorten.api.url") : "http://gunshorten.cloudfoundry.com/api";
-    protected static String SLASH = "/";
-    protected static String AMPERSAND = "&";
-    protected static String EQUALS = "=";
+    protected static final String SLASH = "/";
+    protected static final String AMPERSAND = "&";
+    protected static final String EQUALS = "=";
+    
+    public static void setReferrer(final String pReferrer) {
+    	referrer = pReferrer;
+    }
     
     protected static JSONObject post(final String serviceUrl, final String paramsString) throws Exception {
         final URL url = new URL(serviceUrl);
@@ -99,7 +103,6 @@ public abstract class GunshortenAPI {
     }
     
     private static JSONObject parseJSON(final String jsonResponse) throws ParseException {
-        final Object obj = JSONValue.parse(jsonResponse);
-        return (JSONObject)obj;
+        return (JSONObject)JSONValue.parse(jsonResponse);
     }
 }

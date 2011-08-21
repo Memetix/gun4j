@@ -16,6 +16,7 @@
 package com.memetix.gun4j.expand;
 
 import com.memetix.gun4j.GunshortenAPI;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -37,17 +38,21 @@ public class UrlExpander extends GunshortenAPI {
     
     
     public static String expand(final String shortUrl) throws Exception {
-        final StringBuilder sb = new StringBuilder();
-        sb.append(PARAM_NAME);
-        sb.append(EQUALS);
-        sb.append(shortUrl);
-        
-        final Map<String,String> results = parseResponse(post(SERVICE_URL,sb.toString()));
-        
-        if(results.containsKey(shortUrl))
-            return results.get(shortUrl);
-        else
-            return shortUrl;
+        if(shortUrl!=null) {
+            final StringBuilder sb = new StringBuilder();
+            sb.append(PARAM_NAME);
+            sb.append(EQUALS);
+            sb.append(URLEncoder.encode(shortUrl, ENCODING));
+
+            Map<String,String> results = parseResponse(post(SERVICE_URL,sb.toString()));
+
+            if(results.containsKey(shortUrl))
+                return results.get(shortUrl);
+            else
+                return shortUrl.toString();
+        } else {
+            return null;
+        }
     }
     
     public static Map<String,String> expand(final Set<String> shortUrls) throws Exception {
@@ -60,27 +65,29 @@ public class UrlExpander extends GunshortenAPI {
             }
             sb.append(PARAM_NAME);
             sb.append(EQUALS);
-            sb.append(shortUrl);
+            sb.append(URLEncoder.encode(shortUrl, ENCODING));
             i++;
         }
         
-        final Map<String,String> results = parseResponse(post(SERVICE_URL,sb.toString()));
+        Map<String,String> results = parseResponse(post(SERVICE_URL,sb.toString()));
         return results;
     }
     
     public static Map<String,String> expand(final List<String> shortUrls) throws Exception {
-        final Set<String> urlSet = new HashSet<String>();
+        Set<String> urlSet = new HashSet<String>();
         urlSet.addAll(shortUrls);
         return expand(urlSet);
     }
     
     private static Map<String,String> parseResponse(final JSONObject json) {
-        final Map<String,String> expandedResults = new HashMap<String,String>();
+        Map<String,String> expandedResults = new HashMap<String,String>();
         final JSONObject data = (JSONObject)json.get("data");
-        final JSONArray expand = (JSONArray)data.get("expand");
-        for(Object result : expand) {
-            final JSONObject expandedResult = (JSONObject)result;
-            expandedResults.put((String)expandedResult.get("shortUrl"), (String)expandedResult.get("fullUrl"));
+        if(data.containsKey("expand")) {
+            final JSONArray expand = (JSONArray)data.get("expand");
+            for(Object result : expand) {
+                final JSONObject expandedResult = (JSONObject)result;
+                expandedResults.put((String)expandedResult.get("shortUrl"), (String)expandedResult.get("fullUrl"));
+            }
         }
         return expandedResults;
     }
